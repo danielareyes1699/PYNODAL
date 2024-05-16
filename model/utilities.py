@@ -209,3 +209,74 @@ pb_val = 1000
 # Try with ef = 1 (default efficiency)
 aof_result = aof(q_test_val, pwf_test_val, pr_val, pb_val)
 print("AOF (ef=1): ", aof_result)
+
+# Qo (bpd) @ Darcy Conditions
+def qo_darcy(q_test, pwf_test, pr, pwf, pb, ef=1, ef2=None):
+    qo = j(q_test, pwf_test, pr, pb) * (pr - pwf)
+    return qo
+
+
+# Qo (bpd) @ Vogel Conditions
+def qo_vogel(q_test, pwf_test, pr, pwf, pb, ef=1, ef2=None):
+    qo = aof(q_test, pwf_test, pr, pb) * \
+         (1 - 0.2 * (pwf / pr) - 0.8 * (pwf / pr) ** 2)
+    return qo
+
+
+# Qo (bpd) @ Vogel Conditions
+def qo_ipr_compuesto(q_test, pwf_test, pr, pwf, pb):
+    if pr > pb:      # Saturated reservoir
+        if pr >= pb:
+            qo = Qb(q_test, pwf_test, pr, pb) + \
+                 ((j(q_test, pwf_test, pr, pb) * pb) / 1.8) * \
+                 (1 - 0.2 * (pwf / pb) - 0.8 * (pwf / pb) ** 2)
+
+    elif pr <= pb:      # Undersaturated reservoir
+        qo = aof(q_test, pwf_test, pr, pb) * \
+             (1 - 0.2 * (pwf / pr) - 0.8 * (pwf / pr) ** 2)
+    return qo
+
+
+# Qo (bpd) @ Standing Conditions
+def qo_standing(q_test, pwf_test, pr, pwf, pb, ef=1, ef2=None):
+    qo = aof(q_test, pwf_test, pr, pb, ef=1) * (
+        1.8 * ef * (1 - pwf / pr) - 0.8 * ef ** 2 * (1 - pwf / pr) ** 2)
+    return qo
+
+
+# Qo (bpd) @ all conditions
+def qo(q_test, pwf_test, pr, pwf, pb, ef=1, ef2=None):
+    if ef == 1 and ef2 is None:
+        if pr > pb:       # Saturated reservoir
+            if pwf >= pb:
+                qo = qo_darcy(q_test, pwf_test, pr, pwf, pb)
+            elif pwf < pb:
+                qo = Qo(q_test, pwf_test, pr, pb) + \
+                     ((j(q_test, pwf_test, pr, pb) * pb) / 1.8) * \
+                     (1 - 0.2 * (pwf / pb) - 0.8 * (pwf / pb) ** 2)
+        else:         # Subsaturated reservoir
+            qo = qo_vogel(q_test, pwf_test, pr, pwf, pb)
+
+    elif ef != 1 and ef2 is None:
+        if pr > pb:       # Subsaturated reservoir
+            if pwf >= pb:
+                qo = qo_darcy(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+            elif pwf < pb:
+                qo = Qb(q_test, pwf_test, pwf, pb, ef) + \
+                    ((j(q_test, pwf_test, pr, pb, ef) * pb) / 1.8) * \
+                    (1.8 * (1- pwf / pb) - 0.8 * ef * (1 - pwf / pb) ** 2)
+        else:       # Saturated reservoir
+            qo = qo_standing(q_test, pwf_test, pr, pwf, pb, ef)
+
+    elif ef !=1 and ef2 is not None:
+        if pr > pb:       #Subsaturated reservoir
+            if pwf >= pb:
+                qo = qo_darcy(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+            elif pwf < pb:
+                qo = Qb(q_test, pwf_test, pr, pb, ef, ef2) + \
+                     ((j(q_test, pwf_test, pr, pb, ef, ef2) * pb) / 1.8) * \
+                     (1.8 * (1- pwf / pb) - 0.8 * ef * (1- pwf / pb) ** 2)
+            else:       # Saturated reservoir
+                qo = qo_standing(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+    return qo
+
