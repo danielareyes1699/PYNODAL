@@ -76,26 +76,27 @@ def j(
     :param ef2: Efficiency 2
     :return: Productivity Index
     """
+
     if ef == 1:
         if pwf_test >= pb:
-            j = q_test / (pr - pwf_test)
+            j_value = q_test / (pr - pwf_test)
         else:
-            j = q_test / ((pr - pb) + (pb / 1.8) *
-                          (1 - 0.2 * (pwf_test / pb) - 0.8 * (pwf_test / pb) ** 2))
+            j_value = q_test / ((pr - pb) + (pb / 1.8) *
+                                (1 - 0.2 * (pwf_test / pb) - 0.8 * (pwf_test / pb) ** 2))
     elif ef != 1 and ef2 is None:
         if pwf_test >= pb:
-            j = q_test / (pr - pwf_test)
+            j_value = q_test / (pr - pwf_test)
         else:
-            j = q_test / ((pr - pb) + (pb / 1.8) *
-                          (1.8 * (1 - pwf_test / pb) - 0.8 * ef * (1 - pwf_test / pb) ** 2))
+            j_value = q_test / ((pr - pb) + (pb / 1.8) *
+                                (1.8 * (1 - pwf_test / pb) - 0.8 * ef * (1 - pwf_test / pb) ** 2))
     elif ef != 1 and ef2 is not None:
         if pwf_test >= pb:
-            j = ((q_test / (pr - pwf_test)) / ef) * ef2
+            j_value = ((q_test / (pr - pwf_test)) / ef) * ef2
         else:
-            j = ((q_test / (pr - pb) + (pb / 1.8) *
-                  (1.8 * (1 - pwf_test / pb) - 0.8 *
-                   ef * (1 - pwf_test / pb) ** 2)) / ef) * ef2
-    return j
+            j_value = ((q_test / (pr - pb) + (pb / 1.8) *
+                        (1.8 * (1 - pwf_test / pb) - 0.8 *
+                         ef * (1 - pwf_test / pb) ** 2)) / ef) * ef2
+    return j_value
 
 
 # Quicktest
@@ -131,8 +132,8 @@ def qb(
     :param ef2: efficiency 2
     :return: Bottom hole flow rate
     """
-    qb = j(q_test, pwf_test, pr, pb, ef, ef2) * (pr - pb)
-    return qb
+    qb_value = j(q_test, pwf_test, pr, pb, ef, ef2) * (pr - pb)
+    return qb_value
 
 
 # Quicktest
@@ -172,68 +173,69 @@ def aof(
     :param ef2: efficiency 2
     :return: Absolute Open Flow
     """
+
     if ef == 1 and ef2 is None:
         if pr > pb:  # Undersaturated reservoir
             if pwf_test >= pb:
-                aof = j(q_test, pwf_test, pr, pb) * pr
+                aof_value = j(q_test, pwf_test, pr, pb) * pr
             elif pwf_test < pb:
-                aof = qb(q_test, pwf_test, pr, pb, ef=1) + (
+                aof_value = qb(q_test, pwf_test, pr, pb, ef=1) + (
                     (j(q_test, pwf_test, pr, pb) / 1.8))
         else:  # Saturated reservoir
-            aof = q_test / (1 - 0.2 * (pwf_test / pr) - 0.8 * (pwf_test / pr) ** 2)
+            aof_value = q_test / (1 - 0.2 * (pwf_test / pr) - 0.8 * (pwf_test / pr) ** 2)
 
     elif ef < 1 and ef2 is None:
         if pr > pb:
             if pwf_test >= pb:
-                aof = j(q_test, pwf_test, pr, pb, ef) * pr
+                aof_value = j(q_test, pwf_test, pr, pb, ef) * pr
             elif pwf_test < pb:
-                aof = qb(q_test, pwf_test, pr, pb, ef) + (
+                aof_value = qb(q_test, pwf_test, pr, pb, ef) + (
                         (j(q_test, pwf_test, pr, pb, ef) * pb) / 1.8) * (
-                              1.8 - 0.8 * ef)
+                                    1.8 - 0.8 * ef)
         else:
-            aof = (q_test / (1.8 * ef * (1 - pwf_test / pr) - 0.8 * ef ** 2 * (
+            aof_value = (q_test / (1.8 * ef * (1 - pwf_test / pr) - 0.8 * ef ** 2 * (
                     1 - pwf_test / pr) ** 2)) * (
-                          1.8 * ef - 0.8 * ef ** 2)
+                                1.8 * ef - 0.8 * ef ** 2)
 
     elif ef > 1 and ef2 is None:
         if pr > pb:
             if pwf_test >= pb:
-                aof = j(q_test, pwf_test, pr, pb, ef) * pr
+                aof_value = j(q_test, pwf_test, pr, pb, ef) * pr
             elif pwf_test < pb:
-                aof = qb(q_test, pwf_test, pr, pb, ef) + (
+                aof_value = qb(q_test, pwf_test, pr, pb, ef) + (
                         (j(q_test, pwf_test, pr, pb, ef) * pb) / 1.8) * (
-                              0.624 + 0.376 * ef)
+                                    0.624 + 0.376 * ef)
         else:
-            aof = (q_test / (1.8 * ef * (1 - pwf_test / pr) - 0.8 * ef ** 2 * (
+            aof_value = (q_test / (1.8 * ef * (1 - pwf_test / pr) - 0.8 * ef ** 2 * (
                     1 - pwf_test / pr) ** 2)) * (
-                          0.624 + 0.376 * ef)
+                                0.624 + 0.376 * ef)
 
     elif ef < 1 and ef2 >= 1:
         if pr > pb:
             if pwf_test >= pb:
-                aof = j(q_test, pwf_test, pr, pb, ef, ef2) * pr
+                aof_value = j(q_test, pwf_test, pr, pb, ef, ef2) * pr
             elif pwf_test < pb:
-                aof = qb(q_test, pwf_test, pr, pb, ef, ef2) + (
+                aof_value = qb(q_test, pwf_test, pr, pb, ef, ef2) + (
                         j(q_test, pwf_test, pr, pb, ef, ef2) * pb / 1.8) * (
-                              0.624 + 0.376 * ef2)
+                                    0.624 + 0.376 * ef2)
         else:
-            aof = (q_test / (1.8 * ef * (1 - pwf_test / pr) - 0.8 * ef ** 2 * (
+            aof_value = (q_test / (1.8 * ef * (1 - pwf_test / pr) - 0.8 * ef ** 2 * (
                     1 - pwf_test / pr) ** 2)) * (
-                          0.624 + 0.376 * ef2)
+                                0.624 + 0.376 * ef2)
 
     elif (ef > 1 and ef2 <= 1):
         if pr > pb:
             if pwf_test >= pb:
-                aof = j(q_test, pwf_test, pr, pb, ef, ef2) * pr
+                aof_value = j(q_test, pwf_test, pr, pb, ef, ef2) * pr
             elif pwf_test < pb:
-                aof = qb(q_test, pwf_test, pr, pb, ef, ef2) + (
+                aof_value = qb(q_test, pwf_test, pr, pb, ef, ef2) + (
                         j(q_test, pwf_test, pr, pb, ef, ef2) * pb / 1.8) * (
-                              1.8 - 0.8 * ef2)
+                                    1.8 - 0.8 * ef2)
         else:
-            aof = (q_test / (1.8 * ef * (1 - pwf_test / pr) - 0.8 * ef ** 2 * (
+            aof_value = (q_test / (1.8 * ef * (1 - pwf_test / pr) - 0.8 * ef ** 2 * (
                     1 - pwf_test / pr) ** 2)) * (
-                          1.8 * ef - 0.8 * ef ** 2)
-    return aof
+                                1.8 * ef - 0.8 * ef ** 2)
+    return aof_value
 
 
 # Quicktest
@@ -420,6 +422,7 @@ def qo_ipr_compuesto(q_test: float,
     :param pb: Bubble-point pressure
     :return: Oil Production rate
     """
+    global qo
     if pr > pb:  # Saturated reservoir
         if pwf >= pb:
             qo = qo_darcy(q_test, pwf_test, pr, pwf, pb)
@@ -505,6 +508,7 @@ def qo(q_test: float,
     :return: Oil Production rate
     """
 
+    global qo
     if ef == 1 and ef2 is None:
         if pr > pb:  # Saturated reservoir
             if pwf >= pb:
@@ -877,6 +881,7 @@ def sg_oil(api: float):
     sg_oil_value = 141.5 / (131.5 + api)
     return sg_oil_value
 
+
 # Quicktest
 api_test = 30
 
@@ -899,6 +904,7 @@ def sg_avg(api: float,
     """
     sg_avg = wc * sg_h2o + (1 - wc) * sg_oil(api)
     return sg_avg
+
 
 # Quicktest
 api = 30
@@ -925,6 +931,7 @@ def gradient_avg(api: float,
     g_avg = sg_avg(api, wc, sg_h2o) * 0.433
     return g_avg
 
+
 # Quick test
 api = 30
 wc = 0.2
@@ -932,7 +939,6 @@ sg_h20 = 1.0
 
 g_average = gradient_avg(api, wc, sg_h20)
 print("The average Gradient is:", g_average)
-
 
 # %%
 
