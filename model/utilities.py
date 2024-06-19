@@ -939,24 +939,3 @@ sg_h20 = 1.0
 
 g_average = gradient_avg(api, wc, sg_h20)
 print("The average Gradient is:", g_average)
-
-# %%
-
-# Code flowchart generation
-
-steps = ['Start', 'Calculate IP', 'Calculate Q', 'Generate IPR Curve', 'End']
-
-arrows = [
-    ('Start', 'Calculate IP'),
-    ('Calculate IP', 'Calculate Q'),
-    ('Calculate Q', 'Generate IPR Curve'),
-    ('Generate IPR Curve', 'End')
-]
-
-plt.figure(figsize=(8, 6))
-for step in steps:
-    plt.annotate(step, xy=(steps.index(step), 0), xytext=(steps.index(step), -0.5),
-                 arrowprops=dict(facecolor='black', shrink=0.05))
-plt.ylim(-1, 1)
-plt.axis('off')
-plt.show()
