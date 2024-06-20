@@ -14,25 +14,25 @@ from model.utilities import j, aof, qo, \
     IPR_curve_methods, pwf_darcy, pwf_vogel, f_darcy, sg_oil, sg_avg, gradient_avg
 
 # Insert an icon
-icon = Image.open("Resources/img.png")
+icon = Image.open("resources/Logo.png")
 
 # state the design of the app
-st.set_page_config(page_title="VC APP", page_icon=icon)
+st.set_page_config(page_title="PYNODAL APP", page_icon=icon)
 
 # Insert css codes to improve the design of the app
 
 st.markdown(
     """
 <style>
-h1 {text-align: center;
+h1 {
+    text-align: center;
 }
-body {background-color: #DCE3D5;
-      width: 1400px;
-      margin: 15px auto;
+[data-testid="stAppViewContainer"] {
+    background-color: #ADD8E6; /* Azul claro */
 }
-[data-testid=stSidebar] {
-        background-color: #87CEEB;
-    }
+[data-testid="stSidebar"] {
+    background-color: #D3D3D3; /* Gris claro */
+}
 footer {
   display: none;
 }
@@ -40,12 +40,12 @@ footer {
     unsafe_allow_html=True,
 )
 # Insert title of the app
-st.title("Production Engineering App ®")
+st.title("PYNODAL App ®")
 
 st.write("---")
 
 # Add information of the app
-st.markdown(""" This app is used to see production history,IPR graphs curve, nodal 
+st.markdown(""" This app is used to see production history, IPR graphs curve, nodal 
 analysis for single phase flow and reservoir potential calculations.
 
 ***Python:*** Pandas, NumPy, Streamlit, PIL, Plotly.
@@ -58,22 +58,18 @@ expander.write("This is an open-source web app fully programmed in Python "
                " production parameters.")
 
 # Insert image
-image = Image.open("Resources/logo.png")
+image = Image.open("resources/img.png")
 st.image(image, width=100, use_column_width=True)
 
 # Write subheader
 st.write("---")
 st.subheader("**Fundamentals of the oil industry**")
 
-# Insert video
-video = open("Resources/video1.mp4", "rb")
-st.video(video)
-
 # Insert caption
 st.caption("*Video about Exploration and Production*")
 
 # Our Logo
-logo = Image.open("Resources/logo.png")
+logo = Image.open("resources/Logo.png")
 st.sidebar.image(logo)
 
 # Creation of Menu

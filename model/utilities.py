@@ -422,7 +422,7 @@ def qo_ipr_compuesto(q_test: float,
     :param pb: Bubble-point pressure
     :return: Oil Production rate
     """
-    global qo
+
     if pr > pb:  # Saturated reservoir
         if pwf >= pb:
             qo = qo_darcy(q_test, pwf_test, pr, pwf, pb)
@@ -508,7 +508,6 @@ def qo(q_test: float,
     :return: Oil Production rate
     """
 
-    global qo
     if ef == 1 and ef2 is None:
         if pr > pb:  # Saturated reservoir
             if pwf >= pb:
@@ -734,7 +733,7 @@ def IPR_Curve(q_test: float,
     df = pd.DataFrame()
     df['Pwf(psia)'] = pwf
     df['Qo(bpd)'] = df['Pwf(psia)'].apply(
-        lambda x: qo(q_test, pwf_test, pr, x, pb, ef, ef2))
+        lambda x: qo(q_test, pwf_test, pr, x, pb))
 
     # Create figure and axis
     fig, ax = plt.subplots(figsize=(20, 10))
