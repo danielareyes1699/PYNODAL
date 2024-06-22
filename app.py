@@ -64,7 +64,6 @@ st.image(image, width=100, use_column_width=True)
 # Write subheader
 st.write("---")
 st.subheader("**Fundamentals of the oil industry**")
-
 # Insert caption
 st.caption("*Video about Exploration and Production*")
 
@@ -146,7 +145,7 @@ if file:
         df2 = pd.DataFrame(columns=columns)
 
         # Here the AOF is divided per 10 in order to evaluate the pwf for these 10 different flow rates
-        df2[columns[0]] = df1["Q"].to_numpy()
+        df2[columns[0]] = df1["oil_rate"].to_numpy()
         df2[columns[1]] = df2['q(bpd)'].apply(lambda x: pwf_darcy(QT, PWFT, x, PR, PB))
         df2[columns[2]] = THP
         df2[columns[3]] = gradient_avg(API, WC, SG_H2O) * TVD
