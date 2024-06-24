@@ -18,6 +18,7 @@ from model.other import f_darcy, sg_oil, sg_avg, gradient_avg
 # Insert an icon
 icon = Image.open("resources/Logo.png")
 
+
 # State the design of the app
 st.set_page_config(page_title="PYNODAL APP", page_icon=icon)
 
@@ -55,7 +56,7 @@ st.markdown(
         <div class="logo">
             <img src="resources/Logo.png" style="height: 100%;" alt="Logo">
         </div>
-        <h1>PYNODAL App ®</h1>
+        <h1 style="color: white;" >PYNODAL App ®</h1>
     </header>
     """,
     unsafe_allow_html=True,
@@ -196,7 +197,7 @@ elif selected == "Nodal Analysis Plots":
     df_nodal = pd.read_excel(file3)
     df1_a_n = pd.DataFrame(df_nodal)
     Data = namedtuple("Input", "THP WC SG_H2O API QT ID TVD MD C PR PB PWFT NVL")
-    st.subheader("**Enter input values**")
+    st.subheader("**Enter input values Well 1**")
     THP = st.number_input("Enter THP value: ")
     WC = st.number_input("Enter WC test value: ")
     SG_H2O = st.number_input("Enter SG_H2O value: ")
@@ -227,6 +228,7 @@ elif selected == "Nodal Analysis Plots":
     df2[columns[8]] = df2['Po(psia)'] - df2['Pwf(psia)']
     df2
     st.subheader("**Nodal Analysis Graphic**")
+
 
     fig4, ax4 = plt.subplots()
     pl = df2[['q(bpd)', 'Pwf(psia)', 'Po(psia)', 'Psys(psia)']]
