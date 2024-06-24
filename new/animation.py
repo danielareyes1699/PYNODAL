@@ -6,14 +6,14 @@ import os
 
 #%%
 # Datos proporcionados
-q_test = 1000
-pwf_test = 1500
-pr = 3000
-pb = 2000
-pwf = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000]
+q_test = 282
+pwf_test = 1765
+pr = 2085
+pb = 2100
+pwf = [0, 300, 700, 1000, 1300, 1618, 1765, 1800, 2085]
 
 # Cálculo de IPR
-q_ipr = np.linspace(0, q_test, 500)
+q_ipr = np.linspace(0, q_test, 282)
 Pwf_ipr = pr - q_ipr * (pr - pb) / q_test
 
 # Cálculo de VLP
@@ -24,6 +24,9 @@ Pwf_vlp = np.array(pwf)
 # Punto de intersección IPR-VLP
 q_intersect = (pr - pb) * pwf_test / (pr - pb + pwf_test)
 Pwf_intersect = pr - q_intersect * (pr - pb) / q_test
+
+print("q_vlp:", q_vlp)
+print("Pwf_vlp:", Pwf_vlp)
 
 # Crear la figura y ejes
 fig, ax = plt.subplots()
@@ -42,7 +45,7 @@ line_intersect = ax.axvline(x=q_intersect, ymin=0, ymax=1, color='gray', linesty
 def init():
     line_ipr.set_data([], [])
     line_vlp.set_data([], [])
-    line_intersect.set_xdata(q_intersect)
+    line_intersect.set_xdata([q_intersect])
     return line_ipr, line_vlp, line_intersect
 
 # Función de actualización para la animación
