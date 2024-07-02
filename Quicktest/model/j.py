@@ -1,9 +1,11 @@
-
+# %%
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 
+
+# %%
 
 # Productivity Index using Darcy's Law
 def j_darcy(
@@ -38,7 +40,22 @@ def j_darcy(
         print("There is not flow regime.")
 
 
+# Quicktest
+# Case 1: Pseudocontinue
+ko = 100
+h = 50
+bo = 1.2
+uo = 0.5
+re = 500
+rw = 5
+s = 1
+flow_regime = "pseudocontinue"
 
+J = j_darcy(ko, h, bo, uo, re, rw, s, flow_regime)
+print("Productivity Index: ", J)
+
+
+# %%
 # Productivity Index
 
 def j(
@@ -81,3 +98,13 @@ def j(
                          ef * (1 - pwf_test / pb) ** 2)) / ef) * ef2
     return j_value
 
+
+# Quicktest
+# Case 1: ef = 1 (default), pwf_test >= pb
+q_test = 1000
+pwf_test = 200
+pr = 1500
+pb = 500
+
+productivity_index = j(q_test, pwf_test, pr, pb)
+print("Productivity Index (ef=1, pwf_test >= pb): ", productivity_index)

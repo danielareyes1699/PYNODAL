@@ -1,11 +1,11 @@
-
+# %%
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 
 from model.j import j
-
+# %%
 
 # Calculate the Bottom hole flow rate
 # Q(bpd) @ Pb
@@ -31,6 +31,20 @@ def qb(
     return qb_value
 
 
+# Quicktest
+# Example values for testing
+q_test = 1000
+pwf_test = 200
+pr = 1500
+pb = 500
+ef = 1
+ef2 = None
+
+bottom_hole_flow_rate = qb(q_test, pwf_test, pr, pb, ef, ef2)
+print("Bottom hole flow rate:", bottom_hole_flow_rate)
+
+
+# %%
 # Calculate the Absolute Open Flow
 # Maximum production capacity
 # AOF(bpd)
@@ -119,6 +133,45 @@ def aof(
     return aof_value
 
 
+# Quicktest
+# Example values for testing
+
+q_test_val = 1000
+pwf_test_val = 200
+pr_val = 1500
+pb_val = 500
+
+# Case 1: ef = 1, ef2 = None
+ef = 1
+ef2 = None
+aof_value = aof(q_test, pwf_test, pr, pb, ef, ef2)
+print("Absolute Open Flow (ef=1, ef2=None):", aof_value)
+
+# Case 2: ef < 1, ef2= None
+ef = 0.8
+aof_value = aof(q_test, pwf_test, pr, pb, ef, ef2)
+print("Absolute Open Flow (ef=0,8, ef2=None):", aof_value)
+
+# Case 3: ef > 1, ef2= None
+ef = 1.2
+aof_value = aof(q_test, pwf_test, pr, pb, ef, ef2)
+print("Absolute Open Flow (ef=1.2, ef2=None):", aof_value)
+
+# Case 4: ef < 1, ef2 >= 1
+ef = 0.8
+ef2 = 1.2
+aof_value = aof(q_test, pwf_test, pr, pb, ef, ef2)
+print("Absolute Open Flow (ef=0.8, ef2=1.2):", aof_value)
+
+# Case 5: ef > 1, ef2 <= 1
+ef = 1.2
+ef2 = 0.8
+aof_value = aof(q_test, pwf_test, pr, pb, ef, ef2)
+print("Absolute Open Flow (ef=1.2, ef2=0.8):", aof_value)
+
+
+# %%
+
 # Calculate the oil flow rate under Darcy conditions.
 # Qo (bpd) @ Darcy Conditions
 
@@ -146,6 +199,45 @@ def qo_darcy(
     return qo
 
 
+# Quicktest
+# Example values for testing
+q_test = 1000
+pwf_test = 200
+pr = 1500
+pwf = 300
+pb = 500
+
+# Case 1: ef = 1, ef2= None
+ef = 1
+ef2 = None
+qo_value = qo_darcy(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Darcy conditions (ef=1, ef2=None):", qo_value)
+
+# Case 2: ef < 1, ef2 = None
+ef = 0.8
+qo_value = qo_darcy(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Darcy conditions (ef=0.8, ef2=None):", qo_value)
+
+# Case 3: ef > 1, ef2 = None
+ef = 1.2
+qo_value = qo_darcy(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Darcy conditions (ef=1.2, ef2=None):", qo_value)
+
+# Case 4: ef < 1, ef2 = 1
+ef = 0.8
+ef2 = 1.2
+qo_value = qo_darcy(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Darcy conditions (ef=0.8, ef2=1.2):", qo_value)
+
+# Case 5: ef > 1, ef2 <= 1
+ef = 1.2
+ef2 = 0.8
+qo_value = qo_darcy(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Darcy conditions (ef=1.2, ef2=0.8):", qo_value)
+
+
+# %%
+
 # Qo (bpd) @ Vogel Conditions
 def qo_vogel(
         q_test: float,
@@ -172,6 +264,44 @@ def qo_vogel(
     return qo
 
 
+# Quicktest
+# Example values for testing
+q_test = 1000
+pwf_test = 200
+pr = 1500
+pwf = 300
+pb = 500
+
+# Case 1: ef = 1, ef2= None
+ef = 1
+ef2 = None
+qo_value = qo_vogel(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Vogel conditions (ef=1, ef2=None):", qo_value)
+
+# Case 2: ef < 1, ef2 = None
+ef = 0.8
+qo_value = qo_vogel(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Vogel conditions (ef=0.8, ef2=None):", qo_value)
+
+# Case 3: ef > 1, ef2 = None
+ef = 1.2
+qo_value = qo_vogel(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Vogel conditions (ef=1.2, ef2=None):", qo_value)
+
+# Case 4: ef < 1, ef2 = 1
+ef = 0.8
+ef2 = 1.2
+qo_value = qo_vogel(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Vogel conditions (ef=0.8, ef2=1.2):", qo_value)
+
+# Case 5: ef > 1, ef2 <= 1
+ef = 1.2
+ef2 = 0.8
+qo_value = qo_vogel(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil flow rate under Vogel conditions (ef=1.2, ef2=0.8):", qo_value)
+
+
+# %%
 # Qo (bpd) @ Vogel Conditions
 def qo_ipr_compuesto(q_test: float,
                      pwf_test: float,
@@ -202,6 +332,19 @@ def qo_ipr_compuesto(q_test: float,
     return qo
 
 
+# Quicktest
+
+q_test = 500
+pwf_test = 2500
+pr = 3000
+pwf = 1500
+pb = 2800
+
+qo = qo_ipr_compuesto(q_test, pwf_test, pr, pwf, pb)
+print("Oil Production rate (Qo):", qo)
+
+
+# %%
 # Qo (bpd) @ Standing Conditions
 def qo_standing(q_test: float,
                 pwf_test: float,
@@ -227,6 +370,20 @@ def qo_standing(q_test: float,
     return qo
 
 
+# Quicktest
+
+q_test = 500
+pwf_test = 2500
+pr = 3000
+pwf = 1550
+pb = 2800
+ef = 1
+
+qo = qo_standing(q_test, pwf_test, pr, pwf, pb, ef)
+print("Oil Production rate (Qo):", qo)
+
+
+# %%
 # Qo (bpd) @ all conditions
 def qo(q_test: float,
        pwf_test: float,
@@ -280,3 +437,16 @@ def qo(q_test: float,
             qo = qo_standing(q_test, pwf_test, pr, pwf, pb, ef, ef2)
     return qo
 
+
+# Quicktest
+
+q_test = 500
+pwf_test = 2500
+pr = 3000
+pwf = 1500
+pb = 2800
+ef = 1
+ef2 = None
+
+qo_result = qo(q_test, pwf_test, pr, pwf, pb, ef, ef2)
+print("Oil Production rate (Qo):", qo_result)

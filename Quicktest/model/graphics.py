@@ -1,9 +1,11 @@
+# %%
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 
 from model.q import qo_ipr_compuesto, qo, qb, qo_darcy, qo_vogel
+# %%
 
 # IPR CURVE
 
@@ -41,7 +43,16 @@ def IPR_curve(q_test, pwf_test, pr, pwf: list, pb):
     ax.grid()
     plt.show()
 
+# Quicktest
+q_test = 1000
+pwf_test = 2000
+pr = 3000
+pwf = [3000, 2500, 2000, 1500,1000]
+pb = 1500
 
+IPR_curve(q_test, pwf_test, pr, pwf, pb)
+
+#%%
 # IPR Curve
 def IPR_curve_methods(q_test, pwf_test, pr, pwf:list, pb, method, ef=1, ef2=None):
     # Creating Dataframe
@@ -80,7 +91,19 @@ def IPR_curve_methods(q_test, pwf_test, pr, pwf:list, pb, method, ef=1, ef2=None
     ax.grid()
     plt.show()
 
+# Quicktest
+q_test = 1000
+pwf_test = 2000
+pr = 3000
+pwf = [3000, 2500, 2000, 1500, 1000]
+pb = 1500
 
+IPR_curve_methods(q_test, pwf_test, pr, pwf, pb, method='Darcy')
+IPR_curve_methods(q_test, pwf_test, pr, pwf, pb, method='Vogel')
+IPR_curve_methods(q_test, pwf_test, pr, pwf, pb, method='IPR Compuesto')
+
+
+#%%
 # IPR Curve
 def IPR_Curve(q_test, pwf_test, pr, pwf: list, pb, ef=1, ef2=None, ax=None):
     # Creating Dataframe
@@ -114,3 +137,12 @@ def IPR_Curve(q_test, pwf_test, pr, pwf: list, pb, ef=1, ef2=None, ax=None):
     ax.grid()
     plt.show()
 
+# Quicktest
+q_test = 1000
+pwf_test = 2000
+pr = 3000
+pwf = [3000, 2500, 2000, 1500, 1000]
+pb = 1500
+
+
+IPR_Curve(q_test, pwf_test, pr, pwf, pb)
