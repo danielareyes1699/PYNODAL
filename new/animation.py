@@ -6,11 +6,11 @@ import os
 
 #%%
 # Datos proporcionados
-q_test = 282
-pwf_test = 1765
-pr = 2085
-pb = 2100
-pwf = [0, 300, 700, 1000, 1300, 1618, 1765, 1800, 2085]
+q_test = 1000
+pwf_test = 2000
+pr = 3000
+pwf = 3000, 2500, 2000, 1500, 1000
+pb = 1500
 
 # Cálculo de IPR
 q_ipr = np.linspace(0, q_test, 282)

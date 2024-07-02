@@ -15,19 +15,22 @@ def IPR_curve(q_test, pwf_test, pr, pwf: list, pb):
     df['Pwf(psia)'] = pwf
     df['Qo(bpd)'] = df['Pwf(psia)'].apply(
         lambda x: qo_ipr_compuesto(q_test, pwf_test, pr, x, pb))
-    fig, ax = plt.subplots(figsize=(20, 10))
+    # Ordenar los valores por 'Qo(bpd) para asegurarse de que x es una secuencia
+    df = df.sort_values(by='Qo(bpd)')
+    fig, ax = plt.subplots(figsize=(12, 6))
     x = df['Qo(bpd)']
     y = df['Pwf(psia)']
     # The following steps are used to smooth the curve
-    X_Y_Spline = make_interp_spline(x, y)
-    X_ = np.linspace(x.min(), x.max(), 500)
-    Y_ = X_Y_Spline(X_)
+    x_y_spline = make_interp_spline(x, y)
+    x_ = np.linspace(x.min(), x.max(), 500)
+    y_ = x_y_spline(x_)
     # Build the curve
-    ax.plot(X_, Y_, c='g')
+    ax.plot(x_, y_, c='g')
     ax.set_xlabel('Qo(bpd)', fontsize=14)
     ax.set_ylabel('Pwf(psia)', fontsize=14)
     ax.set_title('IPR', fontsize=18)
-    ax.set(xlim=(0, df['Qo(bpd)'].max() + 10), ylim=(0, df['Pwf(psia)'][0] + 100))
+    ax.set_xlim(0, df['Qo(bpd)'].max() + 100)
+    ax.set_ylim(0, df['Pwf(psia)'].max() + 100)
     # Arrow and Annotations
     plt.annotate(
         'Bubble Point', xy=(qb(q_test, pwf_test, pr, pb), pb),
@@ -40,11 +43,20 @@ def IPR_curve(q_test, pwf_test, pr, pwf: list, pb):
     ax.grid()
     plt.show()
 
+# Quicktest
+q_test = 1000
+pwf_test = 2000
+pr = 3000
+pwf = [3000, 2500, 2000, 1500,1000]
+pb = 1500
 
+IPR_curve(q_test, pwf_test, pr, pwf, pb)
+
+#%%
 # IPR Curve
 def IPR_curve_methods(q_test, pwf_test, pr, pwf:list, pb, method, ef=1, ef2=None):
     # Creating Dataframe
-    fig, ax = plt.subplots(figsize=(20, 10))
+    fig, ax = plt.subplots(figsize=(12, 6))
     df = pd.DataFrame()
     df['Pwf(psia)'] = pwf
     if method == 'Darcy':
@@ -54,18 +66,20 @@ def IPR_curve_methods(q_test, pwf_test, pr, pwf:list, pb, method, ef=1, ef2=None
     elif method == 'IPR Compuesto':
         df['Qo(bpd)'] = df['Pwf(psia)'].apply(lambda x: qo_ipr_compuesto(q_test, pwf_test, pr, x, pb))
     # Stand the axis of the IPR plot
+    df = df.sort_values(by='Qo(bpd)')
     x = df['Qo(bpd)']
     y = df['Pwf(psia)']
     # The following steps are used to smooth the curve
-    X_Y_Spline = make_interp_spline(x, y)
-    X_ = np.linspace(x.min(), x.max(), 500)
-    Y_ = X_Y_Spline(X_)
+    x_y_spline = make_interp_spline(x, y)
+    x_ = np.linspace(x.min(), x.max(), 500)
+    y_ = x_y_spline(x_)
     #Build the curve
-    ax.plot(X_, Y_, c='g')
-    ax.set_xlabel('Qo(bpd)')
-    ax.set_ylabel('Pwf(psia)')
-    ax.set_title('IPR')
-    ax.set(xlim=(0, df['Qo(bpd)'].max() + 10), ylim=(0, df['Pwf(psia)'].max() + 100))
+    ax.plot(x_, y_, c='g')
+    ax.set_xlabel('Qo(bpd)', fontsize=14)
+    ax.set_ylabel('Pwf(psia)', fontsize=15)
+    ax.set_title('IPR', fontsize=18)
+    ax.set_xlim(0, df['Qo(bpd)'].max() + 100)
+    ax.set_ylim(0, df['Pwf(psia)'].max() + 100)
     # Arrow and Annotations
     plt.annotate(
         'Bubble Point', xy=(qb(q_test, pwf_test, pr, pb), pb),xytext=(qb(q_test, pwf_test, pr, pb) + 100, pb + 100) ,
@@ -77,7 +91,19 @@ def IPR_curve_methods(q_test, pwf_test, pr, pwf:list, pb, method, ef=1, ef2=None
     ax.grid()
     plt.show()
 
+# Quicktest
+q_test = 1000
+pwf_test = 2000
+pr = 3000
+pwf = [3000, 2500, 2000, 1500, 1000]
+pb = 1500
 
+IPR_curve_methods(q_test, pwf_test, pr, pwf, pb, method='Darcy')
+IPR_curve_methods(q_test, pwf_test, pr, pwf, pb, method='Vogel')
+IPR_curve_methods(q_test, pwf_test, pr, pwf, pb, method='IPR Compuesto')
+
+
+#%%
 # IPR Curve
 def IPR_Curve(q_test, pwf_test, pr, pwf: list, pb, ef=1, ef2=None, ax=None):
     # Creating Dataframe
@@ -85,15 +111,16 @@ def IPR_Curve(q_test, pwf_test, pr, pwf: list, pb, ef=1, ef2=None, ax=None):
     df['Pwf(psia)'] = pwf
     df['Qo(bpd)'] = df['Pwf(psia)'].apply(
         lambda x: qo(q_test, pwf_test, pr, x, pb, ef, ef2))
-    fig, ax = plt.subplots(figsize=(20, 10))
+    df = df.sort_values(by='Qo(bpd)')
+    fig, ax = plt.subplots(figsize=(12, 6))
     x = df['Qo(bpd)']
     y = df['Pwf(psia)']
     # The following steps are used to smooth the curve
-    X_Y_Spline = make_interp_spline(x, y)
-    X_ = np.linspace(x.min(), x.max(), 500)
-    Y_ = X_Y_Spline(X_)
+    x_y_spline = make_interp_spline(x, y)
+    x_ = np.linspace(x.min(), x.max(), 500)
+    y_ = x_y_spline(x_)
     # Build the curve
-    ax.plot(X_, Y_, c='g')
+    ax.plot(x_, y_, c='g')
     ax.set_xlabel('Qo(bpd)', fontsize=14)
     ax.set_ylabel('Pwf(psia)', fontsize=14)
     ax.set_title('IPR', fontsize=18)
@@ -110,3 +137,12 @@ def IPR_Curve(q_test, pwf_test, pr, pwf: list, pb, ef=1, ef2=None, ax=None):
     ax.grid()
     plt.show()
 
+# Quicktest
+q_test = 1000
+pwf_test = 2000
+pr = 3000
+pwf = [3000, 2500, 2000, 1500, 1000]
+pb = 1500
+
+
+IPR_Curve(q_test, pwf_test, pr, pwf, pb)
