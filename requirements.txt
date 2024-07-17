@@ -10,3 +10,5 @@ streamlit-option-menu==0.3.2
 scipy==1.13.1
 pip==24.1.1
 openpyxl==3.1.4
+
+#Listas de librerias
